@@ -1,0 +1,150 @@
+package trabajo;
+import javax.swing.*;
+import java.util.*;
+
+public class Estudiantes {
+    private static String[] nombres;
+    private static int[] edades;
+
+    public static void main(String[] args) {
+        int n = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese el número de estudiantes: "));
+        nombres = new String[n];
+        edades = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            nombres[i] = JOptionPane.showInputDialog(null, "Ingrese el nombre del estudiante " + (i + 1));
+            edades[i] = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese la edad de " + nombres[i]));
+        }
+
+        while (true) {
+            int opcion = Integer.parseInt(JOptionPane.showInputDialog(
+                    "Seleccione una opción: \n\n" +
+                    "1. Imprimir la lista de estudiantes con su edad\n" +
+                    "2. Indicar el promedio de edades de estudiantes\n" +
+                    "3. Indicar cual o cuales son los estudiantes de mayor edad de todo el grupo\n" +
+                    "4. Indicar cual o cuales son los estudiantes de menor edad de todo el grupo\n" +
+                    "5. Indicar cuantos estudiantes son mayores de edad\n" +
+                    "6. Buscar estudiante por nombre\n" +
+                    "7. Buscar estudiantes por edad\n" +
+                    "8. Salir"
+            ));
+
+            switch (opcion) {
+                case 1:
+                    imprimirLista();
+                    break;
+                case 2:
+                    JOptionPane.showMessageDialog(null, "El promedio de edades de los estudiantes es: " + promedioEdades());
+                    break;
+                case 3:
+                    estudiantesMayores();
+                    break;
+                case 4:
+                    estudiantesMenores();
+                    break;
+                case 5:
+                    JOptionPane.showMessageDialog(null, "Hay " + estudiantesMayoresDeEdad() + " estudiantes mayores de edad");
+                    break;
+                case 6:
+                    buscarPorNombre(JOptionPane.showInputDialog(null, "Ingrese el nombre del estudiante"));
+                    break;
+                case 7:
+                    buscarPorEdad(Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese la edad a buscar")));
+                    break;
+                case 8:
+                    System.exit(0);
+                default:
+                    JOptionPane.showMessageDialog(null, "Opción inválida");
+            }
+        }
+    }
+
+    private static void imprimirLista() {
+        StringBuilder lista = new StringBuilder();
+        for (int i = 0; i < nombres.length; i++) {
+            lista.append(nombres[i]).append(": ").append(edades[i]).append("\n");
+        }
+        JOptionPane.showMessageDialog(null, lista.toString());
+    }
+
+    private static double promedioEdades() {
+        double suma = 0;
+        for (int edad : edades) {
+            suma += edad;
+        }
+        return suma / edades.length;
+    }
+
+    private static void estudiantesMayores() {
+        int mayor = edades[0];
+        for (int edad : edades) {
+            if (edad > mayor) {
+                mayor = edad;
+            }
+        }
+        StringBuilder estudiantes = new StringBuilder();
+        for (int i = 0; i < nombres.length; i++) {
+            if (edades[i] == mayor) {
+                estudiantes.append(nombres[i]).append(", ");
+            }
+        }
+        JOptionPane.showMessageDialog(null, "El o los estudiantes de mayor edad son: " + estudiantes.toString());
+    }
+
+    private static void estudiantesMenores() {
+    int menor = edades[0];
+    for (int edad : edades) {
+        if (edad < menor) {
+            menor = edad;
+        }
+    }
+    StringBuilder estudiantes = new StringBuilder();
+    for (int i = 0; i < nombres.length; i++) {
+        if (edades[i] == menor) {
+            estudiantes.append(nombres[i]).append(", ");
+        }
+    }
+    JOptionPane.showMessageDialog(null, "El o los estudiantes de menor edad son: " + estudiantes.toString());
+}
+
+private static int estudiantesMayoresDeEdad() {
+    int contador = 0;
+    for (int edad : edades) {
+        if (edad >= 18) {
+            contador++;
+        }
+    }
+    return contador;
+}
+
+private static void buscarPorNombre(String nombre) {
+    boolean encontrado = false;
+    int edad = 0;
+    for (int i = 0; i < nombres.length; i++) {
+        if (nombres[i].equalsIgnoreCase(nombre)) {
+            encontrado = true;
+            edad = edades[i];
+            break;
+        }
+    }
+    if (encontrado) {
+        JOptionPane.showMessageDialog(null, "El estudiante " + nombre + " tiene " + edad + " años");
+    } else {
+        JOptionPane.showMessageDialog(null, "No se encontró al estudiante " + nombre);
+    }
+}
+
+private static void buscarPorEdad(int edad) {
+    StringBuilder estudiantes = new StringBuilder();
+    for (int i = 0; i < nombres.length; i++) {
+        if (edades[i] == edad) {
+            estudiantes.append(nombres[i]).append(", ");
+        }
+    }
+    if (estudiantes.length() > 0) {
+        JOptionPane.showMessageDialog(null, "Los estudiantes con edad " + edad + " son: " + estudiantes.toString());
+    } else {
+        JOptionPane.showMessageDialog(null, "No se encontraron estudiantes con edad " + edad);
+    }
+}
+}
